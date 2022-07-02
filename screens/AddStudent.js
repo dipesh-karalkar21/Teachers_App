@@ -12,8 +12,10 @@ import {
   Alert,
   ScrollView,
   TouchableOpacity,
+  Modal
 } from "react-native";
 import StudentList from "./StudentList";
+import Ionicons from "react-native-vector-icons/Ionicons";
 import firebase from "firebase";
 import db from '../config';
 export default class AddStudent extends React.Component{
@@ -26,8 +28,11 @@ export default class AddStudent extends React.Component{
       fees:"",
       date:"",
       userId : firebase.auth().currentUser.email,
+      isModalVisible:false,
     }
   }
+
+  
 
   addStudent=()=> {
       console.log(this.state.userId);
@@ -49,10 +54,62 @@ export default class AddStudent extends React.Component{
       //toast.success("Student added successfully",{position:toast.POSITION.BOTTOM_CENTER})
       this.props.navigation.navigate("StudentList")
   }
+
+  showModal = ()=>{
+    return(
+      <Modal
+        animationType="none"
+        transparent={true}
+        visible={this.state.isModalVisible}>
+      <View style={styles.container2}>
+      <TouchableOpacity
+      style={{width:"100%",alignContent:"right",alignItems:"right",justifyContent:"right"}}
+        onPress={()=>
+            this.setState({
+              isModalVisible:false,
+            })
+            }
+        >
+        <Ionicons name={"close-circle-outline"} size={RFValue(40)} color={"black"}/>
+        </TouchableOpacity>
+      <Image
+          source={require('../assets/Logo.png')}
+          style={styles.sideMenuProfileIcon}></Image> 
+        <TouchableOpacity style={styles.btn2}
+          onPress={()=>{
+            this.props.navigation.navigate("Home"),this.setState({
+              "isModalVisible":false
+            })
+            
+           }}
+        >
+          <Text style={styles.btntext} >Home</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.btn3}
+          onPress={()=>{
+            this.props.navigation.navigate("Fees"),this.setState({
+              "isModalVisible":false
+            })
+           }}
+        >
+          <Text style={styles.btntext2}>View / Create Fees Template</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.btn3}
+          onPress={()=>{
+            this.props.navigation.navigate("Logout")
+          }}
+        >
+          <Text style={styles.btntext2}>Logout</Text>
+        </TouchableOpacity>
+      </View>
+      </Modal>
+    )
+  }
+
   render(){
     return(
       <View style={styles.container}>
-      <ScrollView>
+      <ScrollView style={{width:"100%"}}>
       <SafeAreaView style={styles.droidSafeArea}/>
       <View style={styles.title}>
       <Image style={{width:RFValue(75) , height:RFValue(75) , marginRight:RFValue(10)}} source={require("../assets/Logo.png")} />
@@ -74,7 +131,7 @@ export default class AddStudent extends React.Component{
         </View>
         <View style={styles.textCon}>
         <Text style={styles.text}>Std :</Text>
-        <TextInput placeholder={"Enter Student's Std"} placeholderTextColor={"white"} style={styles.inputFont} keyboardType={"number-pad"} 
+        <TextInput placeholder={"Enter Student's Std"} placeholderTextColor={"white"} style={styles.inputFont}  
           onChangeText={(text)=>{
             this.setState({
               std:text,
@@ -107,7 +164,7 @@ export default class AddStudent extends React.Component{
         <Text style={styles.text}>Joining :</Text>
         <Text style={styles.text}>Date </Text>
         </View>
-        <TextInput placeholder={"DD.MM.YY"} placeholderTextColor={"white"} style={styles.inputFont} keyboardType={"number-pad"}
+        <TextInput placeholder={"DD.MM.YYYY"} placeholderTextColor={"white"} style={styles.inputFont} keyboardType={"number-pad"}
           onChangeText={(text)=>{
             this.setState({
               date:text,
@@ -184,7 +241,6 @@ const styles = StyleSheet.create({
     color:"white",
     fontSize:RFValue(25),
     fontWeight:"bold",
-    fontFamily:"algerian"
   },
   btn:{
     backgroundColor:"red",
@@ -199,5 +255,49 @@ btntext:{
     fontWeight:"bold",
     color:"white",
     textAlign:"center"
+  },
+  btntext2:{
+    fontSize:RFValue(15),
+    fontWeight:"bold",
+    color:"black",
+    textAlign:"center",
+  },
+  btn2:{
+    backgroundColor:"#15193c",
+    width:"90%",
+    height:RFValue(40),
+    textAlign:"center",
+    alignItems:"center",
+    
+    justifyContent:"center",
+    borderRadius:RFValue(10),
+    flexDirection:"row",
+  },
+  btn3:{
+    backgroundColor:"white",
+    width:"90%",
+    height:RFValue(40),
+    textAlign:"center",
+    alignItems:"center",
+    justifyContent:"center",
+    borderRadius:RFValue(10),
+    flexDirection:"row",
+  },
+  container2:{
+    flex:1,
+    borderRadius:RFValue(20),
+    alignItems:'center',
+    justifyContent:"center",
+    backgroundColor:"#ffff",
+    marginRight:RFValue(30),
+    marginLeft : RFValue(30),
+    marginTop:RFValue(146),
+    marginBottom:RFValue(120),
+  },
+  sideMenuProfileIcon: {
+    width: RFValue(250),
+    height: RFValue(250),
+    borderRadius: RFValue(70),
+    resizeMode: 'contain',
   },
 })

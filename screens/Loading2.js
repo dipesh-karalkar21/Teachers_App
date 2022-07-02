@@ -4,7 +4,7 @@ import firebase from "firebase";
 
 export default class Loading2 extends Component {
   componentDidMount() {
-    this.props.setUpdateToTrue()
+  this.props.setUpdateToTrue()
    this.props.navigation.navigate("FeesTemplate") 
   }
 

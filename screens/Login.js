@@ -78,10 +78,6 @@ userLogin = (email, password)=>{
    firebase.auth().signInWithEmailAndPassword(email, password)
    .then(()=>{
      this.props.navigation.navigate("Home")
-      return (Alert.alert("Info","Swipe from left to right to open menu",[{text:"ok",onPress:()=>{console.log("ok pressed")}}],
-        {cancelable:false}
-      )
-      )
    })
    .catch((error)=> {
      var errorCode = error.code;
@@ -371,7 +367,6 @@ const styles = StyleSheet.create({
     color:"white",
     fontSize:RFValue(25),
     fontWeight:"bold",
-    fontFamily:"algerian"
   },
   btn:{
     backgroundColor:"red",

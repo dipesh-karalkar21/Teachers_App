@@ -13,17 +13,19 @@ import {
   TouchableOpacity,
 } from "react-native";
 import CustomSidebar from "../screens/CustomSidebar";
-import { createDrawerNavigator } from "@react-navigation/drawer";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import FeesSlot from '../screens/FeesSlot';
 import FeesTemplate from '../screens/FeesTemplate';
 import TabNavigator from './TabNavigator';
+import TabNavigator1 from './TabNavigator1';
 import Loading from "../screens/Loading";
 import Loading2 from "../screens/Loading2";
 import { DrawerActions } from '@react-navigation/native';
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Login from '../screens/Login';
 import firebase from 'firebase'
 import firebaseConfig from "../config"
-const Drawer = createDrawerNavigator();
+const Drawer = createBottomTabNavigator();
 
 
 export default class DrawerNavigator extends Component{
@@ -60,63 +62,36 @@ export default class DrawerNavigator extends Component{
     this.setState({ isUpdated: false });
   };
 
+
+
   render(){
     return(
- <Drawer.Navigator 
-          initialRouteName={"Logout"}
-          drawerContentOptions={{
-          activeTintColor: "white",
-          activeBackgroundColor:"#15193c",
-          inactiveTintColor: "black",
-          itemStyle: { marginVertical: 5 }
-        }}
-        drawerContent={props => <CustomSidebar {...props} />}
- >
-        <Drawer.Screen
-          name="Home"
-          component={TabNavigator}
-          options={{ unmountOnBlur: true ,
-             headerShown:false
-           }}
-          />
-        <Drawer.Screen
-          name="FeesTemplate"
-          component={this.renderList}
-          options={{ unmountOnBlur: true ,
-             headerShown:false
-           }}
+      <Drawer.Navigator backBehavior="none" >
+      <Drawer.Screen
+        name="Logout"
+        component={Login}
+        options={{ unmountOnBlur: true ,
+           headerShown:false,
+           tabBarStyle:[{display:"none"}]
+         }}
+      />
+      <Drawer.Screen
+        name="Home"
+        component={TabNavigator}
+        options={{
+           headerShown:false,
+           tabBarStyle:[{display:"none"}]
+         }}
         />
-        <Drawer.Screen
-          name="FeesSlot"
-          component={this.renderAdd}
-          options={{ unmountOnBlur: true ,
-             headerShown:false
-            }}
-        />
-        <Drawer.Screen
-          name="Logout"
-          component={Login}
-          options={{ unmountOnBlur: true ,
-             headerShown:false,
-             swipeEnabled:false,
-          swipeEdgeWidth:0,
-           }}
-        />
-        <Drawer.Screen
-          name="---------------------"
-          component={this.renderL}
-          options={{ unmountOnBlur: true,
-             headerShown:false,
-          }}
-        />
-        <Drawer.Screen
-          name="--------------------"
-          component={this.renderL2}
-          options={{ unmountOnBlur: true,
-             headerShown:false,
-          }}
-        />  
-      </Drawer.Navigator>
+      <Drawer.Screen
+        name="Fees"
+        component={TabNavigator1}
+        options={{
+           headerShown:false,
+           tabBarStyle:[{display:"none"}]
+         }}
+      />
+    </Drawer.Navigator>
     )
   }
 }

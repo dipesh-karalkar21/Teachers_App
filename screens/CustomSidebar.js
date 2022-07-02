@@ -3,11 +3,6 @@ import { SafeAreaView, View, StyleSheet, Image } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import firebase from 'firebase';
 
-import {
-  DrawerContentScrollView,
-  DrawerItemList,
-  DrawerItem
-} from '@react-navigation/drawer';
 
 export default class CustomSidebarMenu extends Component {
   render() {
@@ -21,9 +16,6 @@ export default class CustomSidebarMenu extends Component {
         <Image
           source={require('../assets/Logo.png')}
           style={styles.sideMenuProfileIcon}></Image>
-        <DrawerContentScrollView {...props}>
-          <DrawerItemList {...props} />
-        </DrawerContentScrollView>
       </View>
     );
   }

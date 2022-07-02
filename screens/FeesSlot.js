@@ -10,8 +10,10 @@ import {
   ScrollView,
   StatusBar,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  Modal
 } from "react-native";
+import Ionicons from "react-native-vector-icons/Ionicons";
 import firebase from "firebase";
 import db from '../config';
 export default class FeesSlot extends React.Component{
@@ -22,8 +24,11 @@ export default class FeesSlot extends React.Component{
       board:"",
       std:"",
       userId : firebase.auth().currentUser.email,
+      isModalVisible:false,
     }
   }
+
+  
 
   addFees=()=> {
       console.log(this.state.userId);
@@ -44,6 +49,56 @@ export default class FeesSlot extends React.Component{
    
   }
 
+  showModal = ()=>{
+    return(
+      <Modal
+        animationType="none"
+        transparent={true}
+        visible={this.state.isModalVisible}>
+      <View style={styles.container2}>
+      <TouchableOpacity
+      style={{width:"100%",alignContent:"right",alignItems:"right",justifyContent:"right"}}
+        onPress={()=>
+            this.setState({
+              isModalVisible:false,
+            })
+            }
+        >
+        <Ionicons name={"close-circle-outline"} size={RFValue(40)} color={"black"}/>
+        </TouchableOpacity>
+      <Image
+          source={require('../assets/Logo.png')}
+          style={styles.sideMenuProfileIcon}></Image> 
+        <TouchableOpacity style={styles.btn3}
+          onPress={()=>{
+            this.props.navigation.navigate("Home"),this.setState({
+              "isModalVisible":false
+            })
+           }}
+        >
+          <Text style={styles.btntext2} >Home</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.btn2}
+          onPress={()=>{
+            this.props.navigation.navigate("Fees"),this.setState({
+              "isModalVisible":false
+            })
+           }}
+        >
+          <Text style={styles.btntext}>View / Create Fees Template</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.btn3}
+          onPress={()=>{
+            this.props.navigation.navigate("Logout")
+          }}
+        >
+          <Text style={styles.btntext2}>Logout</Text>
+        </TouchableOpacity>
+      </View>
+      </Modal>
+    )
+  }
+
   render(){
     return(
       <View style={styles.container}>
@@ -55,7 +110,7 @@ export default class FeesSlot extends React.Component{
       <View style={styles.main}>
         <View style={styles.textCon}>
         <Text style={styles.text}>Std : </Text>
-        <TextInput placeholder={"Enter Std"} placeholderTextColor={"white"} style={styles.inputFont} 
+        <TextInput placeholder={"Enter Std"} placeholderTextColor={"white"} style={styles.inputFont}
           onChangeText={(text)=>{
             this.setState({
               std:text
@@ -75,7 +130,7 @@ export default class FeesSlot extends React.Component{
         </View>
         <View style={styles.textCon}>
         <Text style={styles.text}>Fees : </Text>
-        <TextInput placeholder={"Enter Fees"} placeholderTextColor={"white"} style={styles.inputFont} 
+        <TextInput placeholder={"Enter Fees"} placeholderTextColor={"white"} style={styles.inputFont} keyboardType={"number-pad"}
           onChangeText={(text)=>{
             this.setState({
               fees:text
@@ -137,7 +192,6 @@ const styles = StyleSheet.create({
     color:"white",
     fontSize:RFValue(25),
     fontWeight:"bold",
-    fontFamily:"algerian"
   },
   btn:{
     backgroundColor:"red",
@@ -153,5 +207,49 @@ const styles = StyleSheet.create({
     fontWeight:"bold",
     color:"white",
     textAlign:"center"
-  }
+  },
+  btntext2:{
+    fontSize:RFValue(15),
+    fontWeight:"bold",
+    color:"black",
+    textAlign:"center",
+  },
+  btn2:{
+    backgroundColor:"#15193c",
+    width:"90%",
+    height:RFValue(40),
+    textAlign:"center",
+    alignItems:"center",
+    
+    justifyContent:"center",
+    borderRadius:RFValue(10),
+    flexDirection:"row",
+  },
+  btn3:{
+    backgroundColor:"white",
+    width:"90%",
+    height:RFValue(40),
+    textAlign:"center",
+    alignItems:"center",
+    justifyContent:"center",
+    borderRadius:RFValue(10),
+    flexDirection:"row",
+  },
+  container2:{
+    flex:1,
+    borderRadius:RFValue(20),
+    alignItems:'center',
+    justifyContent:"center",
+    backgroundColor:"#ffff",
+    marginRight:RFValue(30),
+    marginLeft : RFValue(30),
+    marginTop:RFValue(146),
+    marginBottom:RFValue(120),
+  },
+  sideMenuProfileIcon: {
+    width: RFValue(250),
+    height: RFValue(250),
+    borderRadius: RFValue(70),
+    resizeMode: 'contain',
+  },
   })

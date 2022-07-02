@@ -11,7 +11,8 @@ import {
   Image,
   TouchableOpacity,
   FlatList,
-  Alert
+  Alert,
+  Modal
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import firebase from "firebase";
@@ -21,12 +22,14 @@ constructor(props){
   super(props)
   this.state={
     student:[],
+    isModalVisible:false,
     userId:firebase.auth().currentUser.email,
   }
 }
 
   componentDidMount(){
-    this.getStudent()
+    this.getStudent();
+    
   }
 
 
@@ -57,9 +60,8 @@ constructor(props){
         <Text style={styles.subText} >Joined On: {item.date}</Text>
         <TouchableOpacity style={styles.btn} onPress={()=>{
           db.collection("users").doc(this.state.userId).collection("student").doc(item.name).delete()
-          .then(
-            this.props.navigation.navigate("---------------------")
-          )}} >
+          .then(()=>{this.props.navigation.navigate("Loading")})
+          }} >
           <Ionicons name={"trash"} size={RFValue(30)} color={"white"} /><Text style={styles.btntext}>Delete</Text>
       </TouchableOpacity>
       </View>
@@ -67,14 +69,73 @@ constructor(props){
     );
   };
 
+  showModal = ()=>{
+    return(
+      <Modal
+        animationType="none"
+        transparent={true}
+        visible={this.state.isModalVisible}>
+      <View style={styles.container2}>
+      <TouchableOpacity
+      style={{width:"100%"}}
+        onPress={()=>
+            this.setState({
+              isModalVisible:false,
+            })
+            }
+        >
+        <Ionicons name={"close-circle-outline"} size={RFValue(40)} color={"black"}/>
+        </TouchableOpacity>
+      <Image
+          source={require('../assets/Logo.png')}
+          style={styles.sideMenuProfileIcon}></Image> 
+        <TouchableOpacity style={styles.btn2}
+          onPress={()=>{
+            this.props.navigation.navigate("Home"),this.setState({
+              "isModalVisible":false
+            })
+           }}
+        >
+          <Text style={styles.btntext} >Home</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.btn3}
+          onPress={()=>{
+            this.props.navigation.navigate("Fees"),this.setState({
+              "isModalVisible":false
+            })
+           }}
+        >
+          <Text style={styles.btntext2}>View / Create Fees Template</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.btn3}
+          onPress={()=>{
+            this.props.navigation.navigate("Logout")
+          }}
+        >
+          <Text style={styles.btntext2}>Logout</Text>
+        </TouchableOpacity>
+      </View>
+      </Modal>
+    )
+  }
 
   render(){
     return(
       <View style={styles.container}>
+        {this.showModal()}
       <SafeAreaView style={styles.droidSafeArea}/>
       <View style={styles.title}>
       <Image style={{width:RFValue(75) , height:RFValue(75) , marginRight:RFValue(10)}} source={require("../assets/Logo.png")} />
         <Text style={styles.titletext}>Teacher's App</Text>
+        <TouchableOpacity style={{marginRight:RFValue(10) , marginLeft:RFValue(10)}}
+        onPress={()=>
+            this.setState({
+              isModalVisible:true,
+            })
+            }
+        >
+        <Ionicons name={"menu"} size={RFValue(40)} color={"white"}/>
+        </TouchableOpacity>
       </View>
       <FlatList
             style={{height:200}}
@@ -106,13 +167,11 @@ const styles = StyleSheet.create({
     color:"white",
     fontSize:RFValue(25),
     fontWeight:"bold",
-    fontFamily:"algerian",
   },
   text:{
     color:"white",
     fontSize:RFValue(25),
     fontWeight:"bold",
-    fontFamily:"algerian"
   },
   subText:{
     color:"white",
@@ -153,5 +212,49 @@ btntext:{
     fontWeight:"bold",
     color:"white",
     textAlign:"center",
+  },
+  btntext2:{
+    fontSize:RFValue(15),
+    fontWeight:"bold",
+    color:"black",
+    textAlign:"center",
+  },
+  btn2:{
+    backgroundColor:"#15193c",
+    width:"90%",
+    height:RFValue(40),
+    textAlign:"center",
+    alignItems:"center",
+    
+    justifyContent:"center",
+    borderRadius:RFValue(10),
+    flexDirection:"row",
+  },
+  btn3:{
+    backgroundColor:"white",
+    width:"90%",
+    height:RFValue(40),
+    textAlign:"center",
+    alignItems:"center",
+    justifyContent:"center",
+    borderRadius:RFValue(10),
+    flexDirection:"row",
+  },
+  container2:{
+    flex:1,
+    borderRadius:RFValue(20),
+    alignItems:'center',
+    justifyContent:"center",
+    backgroundColor:"#ffff",
+    marginRight:RFValue(30),
+    marginLeft : RFValue(30),
+    marginTop:RFValue(146),
+    marginBottom:RFValue(120),
+  },
+  sideMenuProfileIcon: {
+    width: RFValue(250),
+    height: RFValue(250),
+    borderRadius: RFValue(70),
+    resizeMode: 'contain',
   },
   })

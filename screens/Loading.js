@@ -5,7 +5,7 @@ import firebase from "firebase";
 export default class Loading extends Component {
   componentDidMount() {
     this.props.setUpdateToTrue()
-   this.props.navigation.navigate("Home") 
+   this.props.navigation.navigate("StudentList") 
   }
 
   render() {
