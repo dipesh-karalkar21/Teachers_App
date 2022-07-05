@@ -92,7 +92,7 @@ constructor(props){
         </View>
         <View style={styles.textCon}>
         <Text style={styles.text}>Std :</Text>
-        <TextInput placeholder={item.std} defaultValue={item.std} placeholderTextColor={"white"} style={styles.inputFont}  
+        <TextInput placeholder={"Enter Student's Std"} placeholderTextColor={"white"} style={styles.inputFont}  
           onChangeText={(text)=>{
             this.setState({
               std:text,
@@ -102,7 +102,7 @@ constructor(props){
         </View>
         <View style={styles.textCon}>
         <Text style={styles.text}>Board :</Text>
-        <TextInput placeholder={item.board} placeholderTextColor={"white"} style={styles.inputFont} 
+        <TextInput placeholder={"Enter the Student's School Board"} placeholderTextColor={"white"} style={styles.inputFont} 
           onChangeText={(text)=>{
             this.setState({
               board:text,
@@ -112,7 +112,7 @@ constructor(props){
         </View>
         <View style={styles.textCon}>
         <Text style={styles.text} keyboardType={"number-pad"}>Fees :</Text>
-        <TextInput placeholder={item.fees} placeholderTextColor={"white"} style={styles.inputFont} keyboardType={"number-pad"}
+        <TextInput placeholder={"Enter Student's Fees"} placeholderTextColor={"white"} style={styles.inputFont} keyboardType={"number-pad"}
           onChangeText={(text)=>{
             this.setState({
               fees:text,
@@ -125,7 +125,7 @@ constructor(props){
         <Text style={styles.text}>Joining :</Text>
         <Text style={styles.text}>Date </Text>
         </View>
-        <TextInput placeholder={item.date} placeholderTextColor={"white"} style={styles.inputFont} keyboardType={"number-pad"}
+        <TextInput placeholder={"DD.MM.YYYY"} placeholderTextColor={"white"} style={styles.inputFont} keyboardType={"number-pad"}
           onChangeText={(text)=>{
             this.setState({
               date:text,
