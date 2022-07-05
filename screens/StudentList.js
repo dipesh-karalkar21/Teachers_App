@@ -82,6 +82,15 @@ constructor(props){
       <View style={styles.title}>
       <Image style={{width:RFValue(75) , height:RFValue(75) , marginRight:RFValue(10)}} source={require("../assets/Logo.png")} />
         <Text style={styles.titletext}>Teacher's App</Text>
+        <TouchableOpacity style={{marginRight:RFValue(10) , marginLeft:RFValue(10)}}
+        onPress={()=>
+            this.setState({
+              modalVisible:false,
+            })
+            }
+        >
+        <Ionicons name={"close-circle-outline"} size={RFValue(40)} color={"white"}/>
+        </TouchableOpacity>
       </View>
       <View style={styles.main}>
       <View style={styles.image}>
@@ -92,7 +101,7 @@ constructor(props){
         </View>
         <View style={styles.textCon}>
         <Text style={styles.text}>Std :</Text>
-        <TextInput placeholder={"Enter Student's Std"} placeholderTextColor={"white"} style={styles.inputFont}  
+        <TextInput placeholder={"Enter Student's Std"} defaultValue={this.state.std} placeholderTextColor={"white"} style={styles.inputFont}  
           onChangeText={(text)=>{
             this.setState({
               std:text,
@@ -102,7 +111,7 @@ constructor(props){
         </View>
         <View style={styles.textCon}>
         <Text style={styles.text}>Board :</Text>
-        <TextInput placeholder={"Enter the Student's School Board"} placeholderTextColor={"white"} style={styles.inputFont} 
+        <TextInput placeholder={"Enter the Student's School Board"} defaultValue={this.state.board} placeholderTextColor={"white"} style={styles.inputFont} 
           onChangeText={(text)=>{
             this.setState({
               board:text,
@@ -112,7 +121,7 @@ constructor(props){
         </View>
         <View style={styles.textCon}>
         <Text style={styles.text} keyboardType={"number-pad"}>Fees :</Text>
-        <TextInput placeholder={"Enter Student's Fees"} placeholderTextColor={"white"} style={styles.inputFont} keyboardType={"number-pad"}
+        <TextInput placeholder={"Enter Student's Fees"} defaultValue={this.state.fees} placeholderTextColor={"white"} style={styles.inputFont} keyboardType={"number-pad"}
           onChangeText={(text)=>{
             this.setState({
               fees:text,
@@ -125,7 +134,7 @@ constructor(props){
         <Text style={styles.text}>Joining :</Text>
         <Text style={styles.text}>Date </Text>
         </View>
-        <TextInput placeholder={"DD.MM.YYYY"} placeholderTextColor={"white"} style={styles.inputFont} keyboardType={"number-pad"}
+        <TextInput placeholder={"DD.MM.YYYY"} defaultValue={this.state.date} placeholderTextColor={"white"} style={styles.inputFont} keyboardType={"number-pad"}
           onChangeText={(text)=>{
             this.setState({
               date:text,
@@ -174,7 +183,11 @@ constructor(props){
       </TouchableOpacity>
       <TouchableOpacity style={styles.btn} onPress={()=>{
           this.setState({
-            modalVisible:true
+            modalVisible:true,
+            std:item.std,
+            board:item.board,
+            fees:item.fees,
+            date:item.date
           })
           }} >
           <Text style={styles.btntext}>Edit</Text>
@@ -275,7 +288,6 @@ constructor(props){
             renderItem={this.renderItem}
             keyExtractor={(item, index) => index.toString()}
             />
-          <Text style={{marginTop:40}}>  </Text>
       </View>
     )
   }
@@ -322,7 +334,7 @@ const styles = StyleSheet.create({
     margin: RFValue(13),
     backgroundColor: "#2f345d",
     borderRadius: RFValue(20),
-    width:RFValue(300),
+    width:RFValue(350),
   },
   sub:{
     flexDirection:"row",
