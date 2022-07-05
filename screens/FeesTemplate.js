@@ -55,7 +55,7 @@ constructor(props){
        <TouchableOpacity style={styles.btn} onPress={()=>{
           db.collection("users").doc(this.state.userId).collection("fees").doc(`${item.std}(${item.board})`).delete()
           .then(
-            this.props.navigation.navigate("Loading")
+            this.props.navigation.navigate("Loading2")
           )}} >
           <Ionicons name={"trash"} size={RFValue(30)} color={"white"} />
        </TouchableOpacity>

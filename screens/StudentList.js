@@ -12,7 +12,8 @@ import {
   TouchableOpacity,
   FlatList,
   Alert,
-  Modal
+  Modal,
+  ScrollView
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import firebase from "firebase";
@@ -23,7 +24,12 @@ constructor(props){
   this.state={
     student:[],
     isModalVisible:false,
+    modalVisible:false,
     userId:firebase.auth().currentUser.email,
+    std:"",
+    board:"",
+    fees:"",
+    date:"",
   }
 }
 
@@ -47,9 +53,109 @@ constructor(props){
       });
   };
 
-  renderItem = ({ item, i }) => {
+  renderItem = ({ item }) => {
+    const date= new Date();
+    const currDay= date.getDate();
+    const currMonth= date.getMonth() + 1;
+    const currYear= date.getFullYear();
+    const estDay= 1;
+    const currDate= `${currDay}/${currMonth}/${currYear}`
+    const estDate= `${estDay}/${currMonth}/${currYear}`
+
+    if(currDate === estDate){
+      db.collection("users").doc(this.state.userId).collection("student").doc(item.name)
+      .update({feeStat:"Pending"})
+    }
+    else{
+      console.log("clear")
+    }
+
     return (
       <View style={styles.card}>
+        <Modal
+        animationType="none"
+        transparent={true}
+        visible={this.state.modalVisible}>
+      <View style={styles.container}>
+      <ScrollView style={{width:"100%"}}>
+      <SafeAreaView style={styles.droidSafeArea}/>
+      <View style={styles.title}>
+      <Image style={{width:RFValue(75) , height:RFValue(75) , marginRight:RFValue(10)}} source={require("../assets/Logo.png")} />
+        <Text style={styles.titletext}>Teacher's App</Text>
+      </View>
+      <View style={styles.main}>
+      <View style={styles.image}>
+        <Image source={require("../assets/Profile.png")} style={{width:RFValue(200) , height:RFValue(200)}}/>
+      </View> 
+        <View style={styles.textCon}>
+        <Text style={styles.text}>Name : {item.name}</Text>
+        </View>
+        <View style={styles.textCon}>
+        <Text style={styles.text}>Std :</Text>
+        <TextInput placeholder={item.std} defaultValue={item.std} placeholderTextColor={"white"} style={styles.inputFont}  
+          onChangeText={(text)=>{
+            this.setState({
+              std:text,
+            })
+          }}
+        />
+        </View>
+        <View style={styles.textCon}>
+        <Text style={styles.text}>Board :</Text>
+        <TextInput placeholder={item.board} placeholderTextColor={"white"} style={styles.inputFont} 
+          onChangeText={(text)=>{
+            this.setState({
+              board:text,
+            })
+          }}
+        />
+        </View>
+        <View style={styles.textCon}>
+        <Text style={styles.text} keyboardType={"number-pad"}>Fees :</Text>
+        <TextInput placeholder={item.fees} placeholderTextColor={"white"} style={styles.inputFont} keyboardType={"number-pad"}
+          onChangeText={(text)=>{
+            this.setState({
+              fees:text,
+            })
+          }}
+        />
+        </View>
+        <View style={styles.mtextCon}>
+        <View>
+        <Text style={styles.text}>Joining :</Text>
+        <Text style={styles.text}>Date </Text>
+        </View>
+        <TextInput placeholder={item.date} placeholderTextColor={"white"} style={styles.inputFont} keyboardType={"number-pad"}
+          onChangeText={(text)=>{
+            this.setState({
+              date:text,
+            })
+          }}
+        />
+        </View>
+        <View style={styles.ntextCon}>
+          <TouchableOpacity style={styles.btn} onPress={()=>{
+            db.collection("users").doc(this.state.userId).collection("student").doc(item.name)
+            .update({
+                 std:this.state.std,
+                 board:this.state.board,
+                 fees:this.state.fees,
+                 date:this.state.date,
+                 })
+            .then(()=>{
+              this.setState({
+                modalVisible:false
+              }),
+              this.props.navigation.navigate("Loading")
+            })
+          }}>
+            <Text style={styles.btntext}>Save</Text>
+          </TouchableOpacity>
+        </View>
+        </View>
+        </ScrollView>
+        </View>
+        </Modal>
       <View style={styles.main}>
         <Text style={styles.text} >{item.name}</Text>
         <View style={styles.sub}>
@@ -58,12 +164,38 @@ constructor(props){
         <Text style={styles.subText} >Fees: {item.fees}</Text>
         </View>
         <Text style={styles.subText} >Joined On: {item.date}</Text>
+        <Text style={styles.subText} >Fees Status: {item.feeStat}</Text>
+        <View style={styles.sub}>
         <TouchableOpacity style={styles.btn} onPress={()=>{
           db.collection("users").doc(this.state.userId).collection("student").doc(item.name).delete()
           .then(()=>{this.props.navigation.navigate("Loading")})
           }} >
           <Ionicons name={"trash"} size={RFValue(30)} color={"white"} /><Text style={styles.btntext}>Delete</Text>
       </TouchableOpacity>
+      <TouchableOpacity style={styles.btn} onPress={()=>{
+          this.setState({
+            modalVisible:true
+          })
+          }} >
+          <Text style={styles.btntext}>Edit</Text>
+      </TouchableOpacity>
+      </View>
+      <View style={styles.sub}>
+      <TouchableOpacity style={styles.btn} onPress={()=>{
+          db.collection("users").doc(this.state.userId).collection("student").doc(item.name)
+          .update({feeStat:"Paid"})
+          .then(()=>{this.props.navigation.navigate("Loading")})
+          }} >
+          <Text style={styles.btntext}>Paid</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.btn} onPress={()=>{
+          db.collection("users").doc(this.state.userId).collection("student").doc(item.name)
+          .update({feeStat:"Pending"})
+          .then(()=>{this.props.navigation.navigate("Loading")})
+          }} >
+          <Text style={styles.btntext}>Not Paid</Text>
+      </TouchableOpacity>
+      </View>
       </View>
       </View>
     );
@@ -154,6 +286,11 @@ const styles = StyleSheet.create({
     backgroundColor:"#15193c",
     alignItems:"center",
   },
+  container3:{
+    flex:1,
+    backgroundColor:"white",
+    alignItems:"center",
+  },
   droidSafeArea: {
     marginTop: Platform.OS === "android" ? StatusBar.currentHeight : RFValue(35)
   },
@@ -189,23 +326,62 @@ const styles = StyleSheet.create({
   },
   sub:{
     flexDirection:"row",
-    justifyContent:"space-around"
+    justifyContent:"space-evenly"
   },
   main:{
     margin:RFValue(10),
     textAlign:"center",
     alignItems:"center",
   },
+  image:{
+    justifyContent:"center",
+    alignItems:"center",
+    marginTop:RFValue(10)
+  },
+  inputFont: {
+    height: RFValue(40),
+    borderColor: "white",
+    borderWidth: RFValue(1),
+    borderRadius: RFValue(10),
+    paddingLeft: RFValue(10),
+    color: "white",
+    width:RFValue(225)
+  },
+  textCon:{
+    flexDirection:"row",
+    justifyContent:"space-around",
+    alignItems:"center",
+    marginTop:RFValue(20)
+  },
+  ntextCon:{
+    flexDirection:"row",
+    justifyContent:"space-around",
+    alignItems:"center",
+    marginTop:RFValue(20),
+    marginBottom:RFValue(60)
+  },
+  mtextCon:{
+    flexDirection:"row",
+    justifyContent:"space-around",
+    marginTop:RFValue(20)
+  },
+  text:{
+    color:"white",
+    fontSize:RFValue(20),
+    fontWeight:"bold"
+  },
     btn:{
     backgroundColor:"red",
-    width:RFValue(150),
+    width:RFValue(100),
     height:RFValue(40),
     textAlign:"center",
     alignItems:"center",
     justifyContent:"center",
     borderRadius:RFValue(10),
     flexDirection:"row",
-    marginTop:RFValue(10)
+    marginTop:RFValue(10),
+    marginRight:RFValue(10),
+    marginLeft:RFValue(10)
   },
 btntext:{
     fontSize:RFValue(15),

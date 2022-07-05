@@ -49,6 +49,7 @@ export default class AddStudent extends React.Component{
         board:this.state.board,
         fees:this.state.fees,
         date:this.state.date,
+        feeStat:"Pending"
         })
       this.props.setUpdateToTrue()
       //toast.success("Student added successfully",{position:toast.POSITION.BOTTOM_CENTER})
